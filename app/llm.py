@@ -25,24 +25,23 @@ OPENROUTER_MODEL = "deepseek/deepseek-r1-0528:free"
 OPENROUTER_BASE = "https://openrouter.ai/api/v1"
 
 
-def _try_chat(client, model, prompt, max_retries=3) -> str:
+def _try_chat(client, model, prompt, max_retries=2) -> str:
     for attempt in range(max_retries):
         try:
             resp = client.models.generate_content(
                 model=model,
                 contents=prompt,
                 config=types.GenerateContentConfig(
-                    max_output_tokens=8192,
+                    max_output_tokens=100,
                     temperature=0.7,
                 ),
             )
             return resp.text
         except Exception as e:
             msg = str(e)
-            if "503" in msg or "UNAVAILABLE" in msg:
-                if attempt < max_retries - 1:
-                    time.sleep(5 * (attempt + 1))
-                    continue
+            if ("503" in msg or "UNAVAILABLE" in msg) and attempt < max_retries - 1:
+                time.sleep(3)
+                continue
             raise
     raise RuntimeError("Max retries exceeded")
 

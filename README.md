@@ -12,7 +12,7 @@ PDF Upload → pdfplumber (text extraction)
            → Supabase  (optional vector persistence)
 
 Chat       → LightRAG  (hybrid retrieval)
-           → Gemini 1.5 Flash (contextual answers)
+           → Gemini 2.5 Flash (contextual answers)
 
 Handbook   → LightRAG  (context retrieval)
            → LongWriter plan-then-write pipeline
@@ -28,8 +28,8 @@ Handbook   → LightRAG  (context retrieval)
 | Component | Technology |
 |---|---|
 | Frontend | Gradio |
-| LLM | Gemini 1.5 Flash (free) |
-| Embeddings | Google `text-embedding-004` |
+| LLM | Gemini 2.5 Flash (free tier) |
+| Embeddings | Google `gemini-embedding-001` |
 | RAG | LightRAG (knowledge graph) |
 | Storage | Supabase pgvector (optional) |
 | PDF Parsing | pdfplumber |
@@ -152,6 +152,6 @@ Documentation/     — Research paper (provided)
 
 **What I built:** A full-stack AI application combining LightRAG's knowledge graph RAG with the LongWriter iterative generation technique to produce 20,000+ word handbooks from uploaded PDF content.
 
-**Approach:** I used Gemini 1.5 Flash as the free LLM backbone for both RAG-grounded Q&A and long-form generation. LightRAG handles entity-level knowledge graph construction from PDFs, providing richer retrieval than simple vector search. The LongWriter pipeline first generates a structured plan, then writes each section with the full plan and preceding text as context — this is what enables coherent 20k+ word output without repetition.
+**Approach:** I used Gemini 2.5 Flash as the free LLM backbone for both RAG-grounded Q&A and long-form generation. LightRAG handles entity-level knowledge graph construction from PDFs, providing richer retrieval than simple vector search. The LongWriter pipeline first generates a structured plan, then writes each section with the full plan and preceding text as context — this is what enables coherent 20k+ word output without repetition.
 
 **Challenges:** Gradio runs its own asyncio event loop, which conflicts with `asyncio.get_event_loop().run_until_complete()` used by LightRAG. Solved this by running LightRAG async calls in isolated threads with their own event loops via `nest_asyncio`.
