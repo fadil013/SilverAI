@@ -1,6 +1,6 @@
 import os
 from supabase import create_client, Client
-import google.generativeai as genai
+import llm as llm_module
 
 _sb: Client = None
 
@@ -14,12 +14,7 @@ def init(url: str, key: str):
         _sb = None
 
 def _embed(text: str) -> list[float]:
-    result = genai.embed_content(
-        model="models/text-embedding-004",
-        content=text,
-        task_type="retrieval_document",
-    )
-    return result["embedding"]
+    return llm_module.embed(text)
 
 def store_chunks(chunks: list[str], source: str):
     if not _sb:
