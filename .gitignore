@@ -1,1 +1,10 @@
 .env
+__pycache__/
+*.pyc
+*.pyo
+lightrag_data/
+*.egg-info/
+.venv/
+venv/
+*.tmp
+handbook_*.md
