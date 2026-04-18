@@ -43,15 +43,9 @@ def init(working_dir: str = "./lightrag_data"):
         from lightrag.utils import EmbeddingFunc
 
         async def _embed(texts: list) -> np.ndarray:
-            import google.generativeai as genai
             embeddings = []
             for text in texts:
-                r = genai.embed_content(
-                    model="models/text-embedding-004",
-                    content=text,
-                    task_type="retrieval_document",
-                )
-                embeddings.append(r["embedding"])
+                embeddings.append(llm_module.embed(text))
             return np.array(embeddings)
 
         _rag = LightRAG(
@@ -71,13 +65,7 @@ def init(working_dir: str = "./lightrag_data"):
 
 
 def _embed_text(text: str) -> list[float]:
-    import google.generativeai as genai
-    r = genai.embed_content(
-        model="models/text-embedding-004",
-        content=text,
-        task_type="retrieval_document",
-    )
-    return r["embedding"]
+    return llm_module.embed(text)
 
 
 def _cosine_top_k(query_emb: list, k: int = 5) -> list[str]:

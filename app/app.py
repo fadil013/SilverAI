@@ -12,10 +12,11 @@ import llm as llm_module
 load_dotenv()
 
 GEMINI_KEY = os.getenv("GEMINI_API_KEY", "")
+OPENROUTER_KEY = os.getenv("OPENROUTER_API_KEY", "")
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
 
-llm_module.init(GEMINI_KEY)
+llm_module.init(gemini_key=GEMINI_KEY, openrouter_key=OPENROUTER_KEY)
 rag_setup.init()
 supabase_store.init(SUPABASE_URL, SUPABASE_KEY)
 
