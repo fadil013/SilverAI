@@ -48,15 +48,20 @@ def init(working_dir: str = "./lightrag_data"):
                 embeddings.append(llm_module.embed(text))
             return np.array(embeddings)
 
-        _rag = LightRAG(
-            working_dir=working_dir,
-            llm_model_func=llm_module.chat_async,
-            embedding_func=EmbeddingFunc(
-                embedding_dim=768,
-                max_token_size=8192,
-                func=_embed,
-            ),
-        )
+        async def _init_rag():
+            rag = LightRAG(
+                working_dir=working_dir,
+                llm_model_func=llm_module.chat_async,
+                embedding_func=EmbeddingFunc(
+                    embedding_dim=3072,
+                    max_token_size=8192,
+                    func=_embed,
+                ),
+            )
+            await rag.initialize_storages()
+            return rag
+
+        _rag = _run_in_thread(_init_rag())
         _use_fallback = False
         print("[RAG] LightRAG initialized.")
     except Exception as e:
