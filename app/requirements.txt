@@ -5,4 +5,3 @@ supabase>=2.0.0
 pdfplumber>=0.10.0
 python-dotenv>=1.0.0
 numpy>=1.24.0
-nest_asyncio>=1.6.0
