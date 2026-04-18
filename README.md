@@ -1,226 +1,157 @@
-# 🚀 AI Engineering Assignment: Handbook Generator
+# SilverAI — AI Handbook Generator
 
-> **CONFIDENTIAL** — LunarTech Intellectual Property
->
-> _Do not share, redistribute, or publish without authorization._
+An AI-powered application that ingests PDF documents, enables document Q&A via RAG, and generates structured **20,000+ word handbooks** using the LongWriter technique.
 
 ---
 
-## 📬 Submission Guide
-
-**Submit your completed work to:**
-
-📧 **tk.lunartech@gmail.com**
-
-### What to Include
-
-| Item            | Description                                                    |
-| --------------- | -------------------------------------------------------------- |
-| **Code**        | GitHub repository link or `.zip` archive                       |
-| **Setup Guide** | Clear instructions to run your application                     |
-| **Demo**        | Short video walkthrough OR screenshots showing the app working |
-| **Write-up**    | Brief summary: what you built, approach taken, any challenges  |
-
-### Submission Checklist
-
-- [ ] Working application (local or deployed)
-- [ ] Can upload PDF documents
-- [ ] Can chat and receive contextual responses
-- [ ] Can generate a 20,000-word handbook via chat
-- [ ] Demo video or screenshots included
-
----
-
-## Executive Summary
-
-### What is This Assignment?
-
-You are tasked with building a **simple AI-powered chat application** that can generate **20,000-word handbooks** from uploaded PDF documents. This is an AI engineering exercise designed to evaluate your ability to integrate modern AI tools and techniques into a functional application.
-
-### Why This is Simpler Than It Looks
-
-This assignment is **not** about building everything from scratch. We are providing you with:
-
-1. **A complete research paper** explaining the LongWriter technique—the method used to generate extremely long-form content that exceeds typical LLM output limits
-2. **A full reference implementation** with working code that demonstrates the core generation logic
-3. **Clear architectural guidance** on exactly which tools to use and how they connect
-4. **Permission to use AI coding assistants**—this is an AI engineering task, so using tools like KiloCode, Antigravity, Cursor, or Kimi K2.5 is not only allowed but encouraged
-
-You are essentially **assembling proven components** into a working application. The hard research and implementation work has already been done.
-
-### The Core Task
-
-Build an application where a user can:
-
-1. **Upload PDF documents** (research papers, documentation, any text-based PDFs)
-2. **Chat with the system** to ask questions about the uploaded content
-3. **Request a handbook** and receive a 20,000+ word structured document generated from the PDF content
-
-The entire interaction should happen through a simple chat interface. No complex UI required.
-
-### Technology Stack Overview
-
-| Component          | Technology                   | Purpose                                           |
-| ------------------ | ---------------------------- | ------------------------------------------------- |
-| **Frontend**       | Gradio, Streamlit, or any UI | Simple chat interface                             |
-| **LLM**            | Grok 4.1                     | Long-context generation with LongWriter technique |
-| **RAG System**     | LightRAG                     | Knowledge graph creation from PDFs                |
-| **Database**       | Supabase                     | Vector storage for embeddings                     |
-| **PDF Processing** | PyPDF, pdfplumber            | Extract text from uploads                         |
-
-### What Success Looks Like
-
-A successful submission demonstrates:
-
-- **PDF → Knowledge**: Upload a PDF and have its content indexed
-- **Chat → Context**: Ask a question and get a response that references the PDF content
-- **Request → Handbook**: Ask for a handbook and receive a 20,000+ word document with structure, headings, and content derived from the uploaded materials
-
----
-
-## 🤖 AI Tools: Why You Should Use Them
-
-> **We don't just allow AI coding tools—we expect you to use them.**
-
-### Why We Encourage AI Assistance
-
-This is an **AI engineering assignment**. The ability to effectively leverage AI tools is a core competency we're evaluating. In the real world, AI engineers use AI to:
-
-- **Accelerate development** — Write boilerplate, debug faster, explore APIs
-- **Learn new technologies** — Get up to speed on LightRAG, Supabase, Grok quickly
-- **Focus on architecture** — Let AI handle syntax while you design the system
-- **Iterate rapidly** — Prototype ideas without getting stuck on implementation details
-
-If you complete this task entirely by hand, you're working harder, not smarter. That's not the mindset we're looking for.
-
-### Recommended Tools
-
-| Tool                    | Best For                 | Why Use It                                       |
-| ----------------------- | ------------------------ | ------------------------------------------------ |
-| **KiloCode**            | VS Code users            | Inline completions, context-aware suggestions    |
-| **Antigravity**         | Complex multi-file tasks | Agentic coding, understands full project context |
-| **Cursor**              | End-to-end development   | AI-first editor with powerful chat + apply       |
-| **Kimi K2.5 Thinking**  | Tricky logic problems    | Deep reasoning for algorithmic challenges        |
-| **Claude / GPT / Grok** | General Q&A              | Debugging, explaining concepts, code review      |
-
-### How to Use Them Effectively
-
-1. **Give context** — Share error messages, explain what you're trying to build
-2. **Iterate** — Don't expect perfect code on first try; refine with follow-ups
-3. **Verify** — AI can make mistakes; test everything it generates
-4. **Learn** — Understand what the AI produces, don't just copy-paste blindly
-
-**Bottom line**: Use every tool at your disposal. That's what a real AI engineer does.
-
----
-
-## 🎯 The Task (One Sentence)
-
-Build a chat app where you upload PDFs, ask questions, and generate a 20,000-word handbook—all through conversation.
-
----
-
-## What You're Building
+## What It Does
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                      YOUR APPLICATION                        │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│   📄 PDF Upload  →  🧠 LightRAG  →  💬 Chat UI  →  📖 Handbook │
-│                       (Supabase)      (Grok 4.1)    (20k words)│
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
+PDF Upload → pdfplumber (text extraction)
+           → LightRAG  (knowledge graph indexing)
+           → Supabase  (optional vector persistence)
+
+Chat       → LightRAG  (hybrid retrieval)
+           → Gemini 1.5 Flash (contextual answers)
+
+Handbook   → LightRAG  (context retrieval)
+           → LongWriter plan-then-write pipeline
+               1. LLM generates a full section-level outline
+               2. Each section written sequentially with accumulated context
+           → 20,000+ word Markdown output + download
 ```
 
-### Core Flow
+---
 
-1. **User uploads PDFs** → System extracts and chunks text
-2. **Chunks stored in Supabase** → LightRAG creates knowledge graph
-3. **User chats with UI** → Context retrieved from knowledge graph
-4. **LongWriter generates** → 20,000-word handbook output
+## Tech Stack
+
+| Component | Technology |
+|---|---|
+| Frontend | Gradio |
+| LLM | Gemini 1.5 Flash (free) |
+| Embeddings | Google `text-embedding-004` |
+| RAG | LightRAG (knowledge graph) |
+| Storage | Supabase pgvector (optional) |
+| PDF Parsing | pdfplumber |
 
 ---
 
-## 📦 What You're Given
+## Setup
 
-### 1. Research Paper
+### 1. Install dependencies
 
-`Documentation/Unleashing 10000 Word Generation From Long Context.pdf`
-
-Read this first. It explains the LongWriter technique for generating ultra-long content.
-
-### 2. Reference Implementation
-
-`LongWriter-main/` — Complete codebase including:
-
-- `agentwrite/` — Core generation logic
-- `train/` — Training scripts (for reference)
-- `trans_web_demo.py` — Web UI demo
-
-### 3. Required Tools
-
-| Tool           | Purpose                                |
-| -------------- | -------------------------------------- |
-| **Grok 4.1**   | Long-context LLM for generation        |
-| **LightRAG**   | Knowledge graph from PDFs              |
-| **Supabase**   | Vector storage + database              |
-| **Any AI IDE** | KiloCode, Antigravity, Kimi K2.5, etc. |
-
----
-
-## 🛠️ Technical Requirements
-
-### Stack
-
-```
-Frontend:      Any (React, Vue, Streamlit, Gradio)
-Backend:       Python or Node.js
-LLM:           Grok 4.1 (via API)
-RAG:           LightRAG
-Storage:       Supabase (pgvector)
+```bash
+cd app
+pip install -r requirements.txt
 ```
 
-### Must-Have Features
+### 2. Configure environment
 
-1. **PDF Upload** — Accept and parse PDF files
-2. **Knowledge Graph** — Store content in LightRAG
-3. **Chat Interface** — Simple text input/output
-4. **Handbook Generation** — Generate 20,000+ words via chat
+```bash
+cp app/.env.example app/.env
+```
 
-### Optional Features
+Edit `app/.env`:
 
-- Multiple PDF support
-- Progress indicator for long generation
-- Export to Markdown/PDF
-- Conversation history
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
 
----
+# Optional — app runs without these
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your_supabase_anon_key_here
+```
 
-## 🧪 Test Case
+Get a free Gemini API key at https://aistudio.google.com/app/apikey
 
-**Input**:
+### 3. Run
 
-- Upload 2-3 AI-related PDFs
-- Chat: "Create a handbook on Retrieval-Augmented Generation"
+```bash
+cd app
+python app.py
+```
 
-**Expected Output**:
-
-- 20,000+ word structured document
-- Table of contents
-- Sections with proper headings
-- Citations from uploaded PDFs
+Open http://localhost:7860
 
 ---
 
-## 🔒 Confidentiality Notice
+## How to Use
 
-This assignment, including all provided materials, is the intellectual property of **LunarTech**. By participating:
+1. **Upload Documents tab** — Upload one or more PDFs, click "Process & Index". The content is extracted and stored in a LightRAG knowledge graph.
 
-- You agree not to share materials publicly
-- You may not publish the solution without permission
-- This is for evaluation purposes only
+2. **Chat with Documents tab** — Ask questions about your uploaded content. Answers are retrieved from the knowledge graph and answered by Gemini.
+
+3. **Generate Handbook tab** — Enter a topic such as:
+   > *"Write a comprehensive handbook on Retrieval-Augmented Generation for practitioners"*
+
+   Click Generate. The app uses the LongWriter plan-then-write pipeline to produce a 20,000+ word structured document. When done, a Download button appears to save it as Markdown.
 
 ---
 
-_Good luck! This is simpler than it looks. The research is done, the code exists—you're putting pieces together._
+## LongWriter Implementation
+
+The handbook generator in `app/handbook_gen.py` implements the LongWriter technique from the paper *"Unleashing 10,000+ Word Generation from Long Context LLMs"*:
+
+1. **Plan** — The LLM is prompted to produce a paragraph-by-paragraph outline with target word counts, ensuring the total reaches 20,000+ words.
+2. **Write** — Each section is written iteratively. The model receives the full plan and the last 3,000 characters of already-written text as context, so each section flows naturally from the previous.
+
+This overcomes the standard LLM output length limit by decomposing the document into coordinated, context-aware chunks.
+
+---
+
+## Supabase Setup (Optional)
+
+If you want to enable vector persistence, run this SQL in your Supabase SQL editor:
+
+```sql
+create extension if not exists vector;
+
+create table documents (
+  id bigserial primary key,
+  content text,
+  source text,
+  chunk_index int,
+  embedding vector(768)
+);
+
+create or replace function match_documents(
+  query_embedding vector(768),
+  match_count int
+)
+returns table(content text, source text)
+language sql stable
+as $$
+  select content, source
+  from documents
+  order by embedding <=> query_embedding
+  limit match_count;
+$$;
+```
+
+---
+
+## Project Structure
+
+```
+app/
+  app.py           — Gradio UI, orchestration
+  llm.py           — Gemini LLM wrapper (sync + async)
+  rag_setup.py     — LightRAG init, insert, query
+  handbook_gen.py  — LongWriter plan-then-write pipeline
+  pdf_parser.py    — PDF extraction + chunking
+  supabase_store.py— Optional Supabase vector store
+  requirements.txt
+  .env.example
+
+LongWriter-main/   — Reference implementation (provided)
+Documentation/     — Research paper (provided)
+```
+
+---
+
+## Write-up
+
+**What I built:** A full-stack AI application combining LightRAG's knowledge graph RAG with the LongWriter iterative generation technique to produce 20,000+ word handbooks from uploaded PDF content.
+
+**Approach:** I used Gemini 1.5 Flash as the free LLM backbone for both RAG-grounded Q&A and long-form generation. LightRAG handles entity-level knowledge graph construction from PDFs, providing richer retrieval than simple vector search. The LongWriter pipeline first generates a structured plan, then writes each section with the full plan and preceding text as context — this is what enables coherent 20k+ word output without repetition.
+
+**Challenges:** Gradio runs its own asyncio event loop, which conflicts with `asyncio.get_event_loop().run_until_complete()` used by LightRAG. Solved this by running LightRAG async calls in isolated threads with their own event loops via `nest_asyncio`.
